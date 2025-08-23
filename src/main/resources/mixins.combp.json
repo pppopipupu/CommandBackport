@@ -8,7 +8,11 @@
 
   ],
   "mixins": [
-    "MixinMapGenStructureAccessor"
+    "MixinMapGenStructureAccessor",
+    "MixinTimerAccessor",
+    "MixinMinecraftAccessor",
+    "MixinMinecraftServer",
+    "MixinMinecraftServerAccessor"
   ],
   "compatibilityLevel": "JAVA_8"
 }

@@ -1,6 +1,8 @@
 package com.pppopipupu.combp.command;
 
-import com.pppopipupu.combp.Config;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -12,17 +14,19 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.pppopipupu.combp.Config;
 
 public class CommandClone extends CommandBase {
+
     private enum MaskMode {
-        REPLACE, MASKED
+        REPLACE,
+        MASKED
     }
 
     private enum CloneMode {
-        NORMAL, MOVE, FORCE
+        NORMAL,
+        MOVE,
+        FORCE
     }
 
     @Override
@@ -51,7 +55,6 @@ public class CommandClone extends CommandBase {
         ChunkCoordinates begin = parseCoordinates(sender, args, 0);
         ChunkCoordinates end = parseCoordinates(sender, args, 3);
         ChunkCoordinates destination = parseCoordinates(sender, args, 6);
-
 
         MaskMode maskMode = MaskMode.REPLACE;
         CloneMode cloneMode = CloneMode.NORMAL;
@@ -87,7 +90,6 @@ public class CommandClone extends CommandBase {
         int sizeY = maxY - minY + 1;
         int sizeZ = maxZ - minZ + 1;
 
-
         if (cloneMode != CloneMode.FORCE) {
             int destMinX = destination.posX;
             int destMinY = destination.posY;
@@ -96,9 +98,8 @@ public class CommandClone extends CommandBase {
             int destMaxY = destMinY + sizeY - 1;
             int destMaxZ = destMinZ + sizeZ - 1;
 
-            if ((minX <= destMaxX && maxX >= destMinX) &&
-                (minY <= destMaxY && maxY >= destMinY) &&
-                (minZ <= destMaxZ && maxZ >= destMinZ)) {
+            if ((minX <= destMaxX && maxX >= destMinX) && (minY <= destMaxY && maxY >= destMinY)
+                && (minZ <= destMaxZ && maxZ >= destMinZ)) {
                 throw new CommandException("commands.combp.clone.noOverlap");
             }
         }
@@ -154,10 +155,8 @@ public class CommandClone extends CommandBase {
             }
         }
 
-
         func_152373_a(sender, this, "commands.combp.clone.success", blocksAffected); // notifyAdmins
     }
-
 
     private ChunkCoordinates parseCoordinates(ICommandSender sender, String[] args, int index) {
         ChunkCoordinates baseCoords = sender.getPlayerCoordinates();
@@ -179,6 +178,7 @@ public class CommandClone extends CommandBase {
     }
 
     private static class BlockInfo {
+
         public final int posX, posY, posZ;
         public final Block block;
         public final int metadata;

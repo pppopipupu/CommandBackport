@@ -19,7 +19,6 @@ import com.pppopipupu.combp.mixin.MixinMapGenStructureAccessor;
 
 public class CommandLocate extends CommandBase {
 
-
     private static final Map<Class<? extends IChunkProvider>, Map<String, MapGenStructure>> structureCache = new WeakHashMap<>();
 
     @Override
@@ -99,8 +98,7 @@ public class CommandLocate extends CommandBase {
         ChunkPosition result = findStructureUncached(
             accessor,
             sender.getPlayerCoordinates().posX,
-            sender.getPlayerCoordinates().posZ
-        );
+            sender.getPlayerCoordinates().posZ);
         if (result != null) {
             sendSuccess(sender, structureName, result.chunkPosX, result.chunkPosZ);
         } else {
@@ -126,13 +124,13 @@ public class CommandLocate extends CommandBase {
                     int chunkX = startChunkX + dx;
                     int chunkZ = startChunkZ + dz;
 
-
                     if (accessor.invoke_canSpawnStructureAtCoords(chunkX, chunkZ)) {
 
                         StructureStart structureStart = accessor.invoke_getStructureStart(chunkX, chunkZ);
 
-
-                        if (structureStart != null && structureStart.getComponents() != null && !structureStart.getComponents().isEmpty()) {
+                        if (structureStart != null && structureStart.getComponents() != null
+                            && !structureStart.getComponents()
+                                .isEmpty()) {
 
                             StructureBoundingBox boundingBox = structureStart.getBoundingBox();
                             if (boundingBox != null) {
@@ -160,7 +158,6 @@ public class CommandLocate extends CommandBase {
             Map<String, MapGenStructure> foundStructures = new HashMap<>();
             final IChunkProvider finalProvider = provider;
 
-
             for (Class<?> c = providerClass; c != null; c = c.getSuperclass()) {
                 for (java.lang.reflect.Field field : c.getDeclaredFields()) {
                     try {
@@ -170,33 +167,41 @@ public class CommandLocate extends CommandBase {
                             continue;
                         }
 
-
                         if (fieldValue instanceof MapGenStructure) {
                             MapGenStructure structure = (MapGenStructure) fieldValue;
-                            foundStructures.putIfAbsent(structure.func_143025_a().toLowerCase(), structure);
+                            foundStructures.putIfAbsent(
+                                structure.func_143025_a()
+                                    .toLowerCase(),
+                                structure);
                         } else if (fieldValue instanceof Collection) {
                             for (Object element : (Collection<?>) fieldValue) {
                                 if (element instanceof MapGenStructure) {
                                     MapGenStructure structure = (MapGenStructure) element;
-                                    foundStructures.putIfAbsent(structure.func_143025_a().toLowerCase(), structure);
+                                    foundStructures.putIfAbsent(
+                                        structure.func_143025_a()
+                                            .toLowerCase(),
+                                        structure);
                                 }
                             }
                         } else if (fieldValue instanceof Map) {
                             for (Object mapValue : ((Map<?, ?>) fieldValue).values()) {
                                 if (mapValue instanceof MapGenStructure) {
                                     MapGenStructure structure = (MapGenStructure) mapValue;
-                                    foundStructures.putIfAbsent(structure.func_143025_a().toLowerCase(), structure);
+                                    foundStructures.putIfAbsent(
+                                        structure.func_143025_a()
+                                            .toLowerCase(),
+                                        structure);
                                 }
                             }
                         }
-                    } catch (Exception e) {
-                    }
+                    } catch (Exception e) {}
                 }
             }
             structureCache.put(providerClass, foundStructures);
         }
 
-        return structureCache.get(providerClass).get(lowerCaseName);
+        return structureCache.get(providerClass)
+            .get(lowerCaseName);
     }
 
     private void sendSuccess(ICommandSender sender, String name, int x, int z) {
@@ -209,7 +214,6 @@ public class CommandLocate extends CommandBase {
             .setColor(EnumChatFormatting.RED);
         sender.addChatMessage(component);
     }
-
 
     @Override
     public List addTabCompletionOptions(ICommandSender sender, String[] args) {

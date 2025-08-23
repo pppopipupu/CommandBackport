@@ -13,7 +13,6 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 import com.pppopipupu.combp.Config;
-import net.minecraft.world.WorldServer;
 
 public class CommandFill extends CommandBase {
 
