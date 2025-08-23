@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8.3-GTNH",
+  "package": "com.pppopipupu.combp.mixin",
+  "refmap": "mixins.combp.refmap.json",
+  "target": "@env(DEFAULT)",
+  "client": [
+
+  ],
+  "mixins": [
+    "MixinMapGenStructureAccessor"
+  ],
+  "compatibilityLevel": "JAVA_8"
+}

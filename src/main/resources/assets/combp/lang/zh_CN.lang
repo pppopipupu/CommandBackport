@@ -1,0 +1,16 @@
+commands.combp.fill.usage=/fill <from> <to> <block> (可选) <meta> (可选) <mode> (可选) <replaceTileName> (可选) <replaceTileMeta>
+commands.combp.fill.outOfRange=Y 坐标超出范围 (必须在 0 到 255 之间)。
+commands.combp.fill.outOfWorld=无法在世界外放置方块。
+commands.combp.fill.success=成功填充了 %s 个方块。
+commands.combp.locate.usage=用法: /locate <biome|structure> <结构名称>
+commands.combp.locate.start.biome=正在搜索生物群系: %1$s...
+commands.combp.locate.start.structure=正在搜索结构: %1$s...
+commands.combp.locate.biome.invalid=无效的生物群系名称: %1$s
+commands.combp.locate.structure.invalid=无效或不可用的结构: %1$s
+commands.combp.locate.fail=附近未能找到 %1$s。
+commands.combp.locate.success=已在 X: %2$d, Z: %3$d 处找到 %1$s
+commands.combp.clone.usage=/clone <x1> <y1> <z1> <x2> <y2> <z2> <x> <y> <z> [maskMode] [cloneMode]
+commands.combp.clone.success=成功克隆了 %s 个方块。
+commands.combp.clone.noOverlap=源区域和目标区域不能重叠。
+commands.combp.clone.invalidMaskMode=无效的遮罩模式 '%s'。必须为 'replace' 或 'masked'。
+commands.combp.clone.invalidCloneMode=无效的克隆模式 '%s'。必须为 'force', 'move' 或 'normal'。
