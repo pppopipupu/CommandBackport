@@ -15,7 +15,7 @@ public class Config {
             "command_prefix",
             Configuration.CATEGORY_GENERAL,
             command_prefix,
-            "The prefix of commands added by this mod");
+            "The prefix of commands added by this mod(for avoid conflict)");
 
         if (configuration.hasChanged()) {
             configuration.save();
