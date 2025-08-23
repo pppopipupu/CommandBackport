@@ -38,7 +38,6 @@ public class S2CTickRatePacket implements IMessage {
             Minecraft.getMinecraft()
                 .func_152344_a(() -> {
                     Timer timer = ((MixinMinecraftAccessor) Minecraft.getMinecraft()).getTimer();
-
                     if (timer != null) {
                         ((MixinTimerAccessor) timer).setTicksPerSecond(message.tickRate);
                     }

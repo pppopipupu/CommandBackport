@@ -54,7 +54,7 @@ public class TickManager {
 
         if (isSprinting) {
             if (sprintStopTime > 0 && System.currentTimeMillis() > sprintStopTime) {
-                stopSprint(server);
+                stopSprint();
             } else {
                 while ((System.nanoTime() - tickLogicStartTime) < timeBudget) {
                     tickOnce(server);
@@ -89,7 +89,7 @@ public class TickManager {
         }
     }
 
-    public static void setTickRate(MinecraftServer server, float rate) {
+    public static void setTickRate(float rate) {
         targetTickRate = Math.max(1.0f, rate);
         isSprinting = false;
         sprintStopTime = -1;
@@ -97,12 +97,12 @@ public class TickManager {
         CommonProxy.network.sendToAll(new S2CTickRatePacket(targetTickRate));
     }
 
-    public static void startSprint(MinecraftServer server, int durationSeconds, ICommandSender initiator) {
+    public static void startSprint(int durationSeconds, ICommandSender initiator) {
         if (!isSprinting) {
             previousTickRate = targetTickRate;
         }
         isSprinting = true;
-        sprintInitiator = initiator; // 存储发起者
+        sprintInitiator = initiator;
         if (durationSeconds > 0) {
             sprintStopTime = System.currentTimeMillis() + durationSeconds * 1000L;
         } else {
@@ -112,7 +112,7 @@ public class TickManager {
         CommonProxy.network.sendToAll(new S2CTickRatePacket(20.0f));
     }
 
-    public static void stopSprint(MinecraftServer server) {
+    public static void stopSprint() {
         if (!isSprinting) return;
 
         PerformanceData report = getPerformanceData();
@@ -141,14 +141,14 @@ public class TickManager {
             }
         }
 
-        forceStopSprintWithoutReport(server);
+        forceStopSprintWithoutReport();
     }
 
-    private static void forceStopSprintWithoutReport(MinecraftServer server) {
+    private static void forceStopSprintWithoutReport() {
         isSprinting = false;
         sprintStopTime = -1;
-        sprintInitiator = null; // 清理发起者引用
-        setTickRate(server, previousTickRate);
+        sprintInitiator = null;
+        setTickRate(previousTickRate);
     }
 
     private static PerformanceData getPerformanceData() {

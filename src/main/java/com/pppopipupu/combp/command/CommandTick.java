@@ -5,7 +5,6 @@ import java.util.List;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentTranslation;
 
 import com.pppopipupu.combp.Config;
@@ -70,7 +69,7 @@ public class CommandTick extends CommandBase {
     private void handleRate(ICommandSender sender, String[] args) {
         if (args.length != 2) throw new WrongUsageException("commands.combp.tick.rate.usage");
         float rate = (float) parseDoubleBounded(sender, args[1], 1.0, 1000.0);
-        TickManager.setTickRate(MinecraftServer.getServer(), rate);
+        TickManager.setTickRate(rate);
         func_152373_a(sender, this, "commands.combp.tick.rate.success", rate);
     }
 
@@ -79,7 +78,7 @@ public class CommandTick extends CommandBase {
             if (!TickManager.isSprinting()) {
                 throw new WrongUsageException("commands.combp.tick.sprint.not_sprinting");
             }
-            TickManager.stopSprint(MinecraftServer.getServer());
+            TickManager.stopSprint();
             return;
         }
 
@@ -91,7 +90,7 @@ public class CommandTick extends CommandBase {
         if (args.length == 2) {
             duration = parseIntBounded(sender, args[1], 1, 3600);
         }
-        TickManager.startSprint(MinecraftServer.getServer(), duration, sender);
+        TickManager.startSprint(duration, sender);
         if (duration > 0) {
             func_152373_a(sender, this, "commands.combp.tick.sprint.success_duration", duration);
         } else {

@@ -4,20 +4,17 @@ import net.minecraft.server.MinecraftServer;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 import com.pppopipupu.combp.TickManager;
 
 @Mixin(MinecraftServer.class)
 public abstract class MixinMinecraftServer {
 
-    @Inject(
+    @Redirect(
         method = "Lnet/minecraft/server/MinecraftServer;tick()V",
-        at = @At(value = "INVOKE", target = "Lnet/minecraft/server/MinecraftServer;updateTimeLightAndEntities()V"),
-        cancellable = true)
-    private void onUpdateTimeLightAndEntities(CallbackInfo ci) {
-        ci.cancel();
-        TickManager.runControlledTicks((MinecraftServer) (Object) this);
+        at = @At(value = "INVOKE", target = "Lnet/minecraft/server/MinecraftServer;updateTimeLightAndEntities()V"))
+    private void redirectUpdateTimeLightAndEntities(MinecraftServer server) {
+        TickManager.runControlledTicks(server);
     }
 }
