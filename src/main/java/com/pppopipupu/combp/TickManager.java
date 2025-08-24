@@ -1,7 +1,6 @@
 package com.pppopipupu.combp;
 
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.OptionalDouble;
 
 import net.minecraft.command.ICommandSender;
@@ -20,8 +19,11 @@ public class TickManager {
     private static boolean isSprinting = false;
     private static long sprintStopTime = -1;
     private static double tickAccumulator = 0.0;
-    private static final LinkedList<Long> tickTimes = new LinkedList<>();
+    private static final long[] tickTimes = new long[PERFORMANCE_DATA_CAPACITY];
+    private static int tickTimesIndex = 0;
+    private static int tickTimesCount = 0;
     private static ICommandSender sprintInitiator = null;
+    private static long tickTimeSum = 0;
 
     public static float getTargetTickRate() {
         return targetTickRate;
@@ -36,16 +38,10 @@ public class TickManager {
     }
 
     public static OptionalDouble getCurrentAverageMspt() {
-        synchronized (tickTimes) {
-            if (tickTimes.isEmpty()) {
-                return OptionalDouble.empty();
-            }
-            return OptionalDouble.of(
-                tickTimes.stream()
-                    .mapToLong(Long::longValue)
-                    .average()
-                    .orElse(0) / 1_000_000.0);
+        if (tickTimesCount == 0) {
+            return OptionalDouble.empty();
         }
+        return OptionalDouble.of((double) tickTimeSum / tickTimesCount / 1_000_000.0);
     }
 
     public static void runControlledTicks(MinecraftServer server) {
@@ -81,11 +77,18 @@ public class TickManager {
         ((MixinMinecraftServerAccessor) server).invokeUpdateTimeLightAndEntities();
         long endTime = System.nanoTime();
 
-        synchronized (tickTimes) {
-            tickTimes.add(endTime - startTime);
-            if (tickTimes.size() > PERFORMANCE_DATA_CAPACITY) {
-                tickTimes.removeFirst();
-            }
+        long newTickTime = endTime - startTime;
+
+        if (tickTimesCount == PERFORMANCE_DATA_CAPACITY) {
+            tickTimeSum -= tickTimes[tickTimesIndex];
+        }
+
+        tickTimes[tickTimesIndex] = newTickTime;
+        tickTimeSum += newTickTime;
+
+        tickTimesIndex = (tickTimesIndex + 1) % PERFORMANCE_DATA_CAPACITY;
+        if (tickTimesCount < PERFORMANCE_DATA_CAPACITY) {
+            tickTimesCount++;
         }
     }
 
@@ -152,24 +155,27 @@ public class TickManager {
     }
 
     private static PerformanceData getPerformanceData() {
-        if (tickTimes.isEmpty()) {
+        if (tickTimesCount == 0) {
             return new PerformanceData(false, 0, 0, 0, 0, 0);
         }
-        long[] times;
-        synchronized (tickTimes) {
-            times = tickTimes.stream()
-                .mapToLong(Long::longValue)
-                .toArray();
-            tickTimes.clear();
-        }
-        Arrays.sort(times);
-        double averageMs = Arrays.stream(times)
+
+        long[] sortedTimes = new long[tickTimesCount];
+        System.arraycopy(tickTimes, 0, sortedTimes, 0, tickTimesCount);
+
+        tickTimeSum = 0;
+        tickTimesCount = 0;
+        tickTimesIndex = 0;
+
+        Arrays.sort(sortedTimes);
+        double averageMs = Arrays.stream(sortedTimes)
             .average()
             .orElse(0) / 1_000_000.0;
-        double p50Ms = times[times.length / 2] / 1_000_000.0;
-        double p90Ms = times[(int) (times.length * 0.9)] / 1_000_000.0;
-        double p99Ms = times[(int) (times.length * 0.99)] / 1_000_000.0;
-        return new PerformanceData(true, times.length, averageMs, p50Ms, p90Ms, p99Ms);
+
+        double p50Ms = sortedTimes[sortedTimes.length / 2] / 1_000_000.0;
+        double p90Ms = sortedTimes[(int) (sortedTimes.length * 0.9)] / 1_000_000.0;
+        double p99Ms = sortedTimes[(int) (sortedTimes.length * 0.99)] / 1_000_000.0;
+
+        return new PerformanceData(true, sortedTimes.length, averageMs, p50Ms, p90Ms, p99Ms);
     }
 
     public static class PerformanceData {
