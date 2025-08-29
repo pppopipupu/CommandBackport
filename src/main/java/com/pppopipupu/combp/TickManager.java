@@ -24,9 +24,27 @@ public class TickManager {
     private static int tickTimesCount = 0;
     private static ICommandSender sprintInitiator = null;
     private static long tickTimeSum = 0;
+    private static boolean isGameFrozen = false;
 
     public static float getTargetTickRate() {
         return targetTickRate;
+    }
+
+    public static boolean isGameFrozen() {
+        return isGameFrozen;
+    }
+
+    public static void freezeGame() {
+        if (isSprinting()) {
+            if (sprintInitiator != null) {
+                forceStopSprintWithoutReport();
+            }
+        }
+        isGameFrozen = true;
+    }
+
+    public static void unfreezeGame() {
+        isGameFrozen = false;
     }
 
     public static boolean isSprinting() {
@@ -147,7 +165,7 @@ public class TickManager {
         forceStopSprintWithoutReport();
     }
 
-    private static void forceStopSprintWithoutReport() {
+    public static void forceStopSprintWithoutReport() {
         isSprinting = false;
         sprintStopTime = -1;
         sprintInitiator = null;

@@ -42,6 +42,12 @@ public class CommandTick extends CommandBase {
             case "sprint":
                 handleSprint(sender, args);
                 break;
+            case "freeze":
+                handleFreeze(sender, args);
+                break;
+            case "unfreeze":
+                handleUnfreeze(sender, args);
+                break;
             default:
                 throw new WrongUsageException(getCommandUsage(sender));
         }
@@ -49,7 +55,9 @@ public class CommandTick extends CommandBase {
 
     private void handleQuery(ICommandSender sender) {
         ChatComponentTranslation statusMessage;
-        if (TickManager.isSprinting()) {
+        if (TickManager.isGameFrozen()) {
+            statusMessage = new ChatComponentTranslation("commands.combp.tick.query.status.frozen");
+        } else if (TickManager.isSprinting()) {
             statusMessage = new ChatComponentTranslation(
                 "commands.combp.tick.query.status.sprinting",
                 String.format("%.1f", TickManager.getPreviousTickRate()));
@@ -98,10 +106,28 @@ public class CommandTick extends CommandBase {
         }
     }
 
+    private void handleFreeze(ICommandSender sender, String[] args) {
+        if (args.length != 1) throw new WrongUsageException("commands.combp.tick.freeze.usage");
+        if (TickManager.isGameFrozen()) {
+            throw new WrongUsageException("commands.combp.tick.freeze.already_frozen");
+        }
+        TickManager.freezeGame();
+        func_152373_a(sender, this, "commands.combp.tick.freeze.success");
+    }
+
+    private void handleUnfreeze(ICommandSender sender, String[] args) {
+        if (args.length != 1) throw new WrongUsageException("commands.combp.tick.unfreeze.usage");
+        if (!TickManager.isGameFrozen()) {
+            throw new WrongUsageException("commands.combp.tick.unfreeze.not_frozen");
+        }
+        TickManager.unfreezeGame();
+        func_152373_a(sender, this, "commands.combp.tick.unfreeze.success");
+    }
+
     @Override
     public List addTabCompletionOptions(ICommandSender sender, String[] args) {
         if (args.length == 1) {
-            return getListOfStringsMatchingLastWord(args, "query", "rate", "sprint");
+            return getListOfStringsMatchingLastWord(args, "query", "rate", "sprint", "freeze", "unfreeze");
         }
         if (args.length == 2 && "sprint".equalsIgnoreCase(args[0])) {
             return getListOfStringsMatchingLastWord(args, "stop");

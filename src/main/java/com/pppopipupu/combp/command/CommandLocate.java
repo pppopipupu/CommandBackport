@@ -32,6 +32,11 @@ public class CommandLocate extends CommandBase {
     }
 
     @Override
+    public int getRequiredPermissionLevel() {
+        return 3;
+    }
+
+    @Override
     public void processCommand(ICommandSender sender, String[] args) {
         if (args.length < 2) {
             throw new WrongUsageException(getCommandUsage(sender));

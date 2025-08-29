@@ -5,14 +5,15 @@
   "refmap": "mixins.combp.refmap.json",
   "target": "@env(DEFAULT)",
   "client": [
-
   ],
   "mixins": [
     "MixinMapGenStructureAccessor",
-    "MixinTimerAccessor",
     "MixinMinecraftAccessor",
     "MixinMinecraftServer",
-    "MixinMinecraftServerAccessor"
+    "MixinMinecraftServerAccessor",
+    "MixinTimerAccessor",
+    "MixinWorld",
+    "MixinWorldServer"
   ],
   "compatibilityLevel": "JAVA_8"
 }
