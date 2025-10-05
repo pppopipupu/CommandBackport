@@ -18,8 +18,6 @@ public class TickManager {
     private static ICommandSender sprintInitiator = null;
     private static boolean isGameFrozen = false;
 
-
-
     public static boolean isGameFrozen() {
         return isGameFrozen;
     }
@@ -69,7 +67,6 @@ public class TickManager {
         }
     }
 
-
     public static void setTickRate(float rate) {
         targetTickRate = Math.max(1.0f, rate);
         isSprinting = false;
@@ -95,7 +92,6 @@ public class TickManager {
 
     public static void stopSprint() {
         if (!isSprinting) return;
-
 
         if (sprintInitiator != null) {
             ChatComponentTranslation stopMessage = new ChatComponentTranslation(

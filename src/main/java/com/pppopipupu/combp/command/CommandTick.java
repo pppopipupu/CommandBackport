@@ -102,7 +102,7 @@ public class CommandTick extends CommandBase {
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args) {
         if (args.length == 1) {
-            return getListOfStringsMatchingLastWord(args,  "rate", "sprint", "freeze", "unfreeze");
+            return getListOfStringsMatchingLastWord(args, "rate", "sprint", "freeze", "unfreeze");
         }
         if (args.length == 2 && "sprint".equalsIgnoreCase(args[0])) {
             return getListOfStringsMatchingLastWord(args, "stop");
