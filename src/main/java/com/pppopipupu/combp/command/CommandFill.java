@@ -124,7 +124,7 @@ public class CommandFill extends CommandBase {
     }
 
     @Override
-    public List addTabCompletionOptions(ICommandSender sender, String[] args) {
+    public List<String> addTabCompletionOptions(ICommandSender sender, String[] args) {
         if (args.length == 9) {
             return getListOfStringsMatchingLastWord(args, "replace", "destroy", "hollow", "outline", "keep");
         }

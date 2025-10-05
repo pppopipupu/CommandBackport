@@ -5,7 +5,6 @@ import java.util.List;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
-import net.minecraft.util.ChatComponentTranslation;
 
 import com.pppopipupu.combp.Config;
 import com.pppopipupu.combp.TickManager;
@@ -33,9 +32,6 @@ public class CommandTick extends CommandBase {
         if (args.length == 0) throw new WrongUsageException(getCommandUsage(sender));
 
         switch (args[0].toLowerCase()) {
-            case "query":
-                handleQuery(sender);
-                break;
             case "rate":
                 handleRate(sender, args);
                 break;
@@ -51,27 +47,6 @@ public class CommandTick extends CommandBase {
             default:
                 throw new WrongUsageException(getCommandUsage(sender));
         }
-    }
-
-    private void handleQuery(ICommandSender sender) {
-        ChatComponentTranslation statusMessage;
-        if (TickManager.isGameFrozen()) {
-            statusMessage = new ChatComponentTranslation("commands.combp.tick.query.status.frozen");
-        } else if (TickManager.isSprinting()) {
-            statusMessage = new ChatComponentTranslation(
-                "commands.combp.tick.query.status.sprinting",
-                String.format("%.1f", TickManager.getPreviousTickRate()));
-        } else {
-            statusMessage = new ChatComponentTranslation(
-                "commands.combp.tick.query.status.normal",
-                String.format("%.1f", TickManager.getTargetTickRate()));
-        }
-        sender.addChatMessage(statusMessage);
-
-        TickManager.getCurrentAverageMspt()
-            .ifPresent(
-                mspt -> sender.addChatMessage(
-                    new ChatComponentTranslation("commands.combp.tick.query.mspt", String.format("%.3f", mspt))));
     }
 
     private void handleRate(ICommandSender sender, String[] args) {
@@ -125,9 +100,9 @@ public class CommandTick extends CommandBase {
     }
 
     @Override
-    public List addTabCompletionOptions(ICommandSender sender, String[] args) {
+    public List<String> addTabCompletionOptions(ICommandSender sender, String[] args) {
         if (args.length == 1) {
-            return getListOfStringsMatchingLastWord(args, "query", "rate", "sprint", "freeze", "unfreeze");
+            return getListOfStringsMatchingLastWord(args,  "rate", "sprint", "freeze", "unfreeze");
         }
         if (args.length == 2 && "sprint".equalsIgnoreCase(args[0])) {
             return getListOfStringsMatchingLastWord(args, "stop");

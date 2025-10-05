@@ -167,7 +167,7 @@ public class CommandClone extends CommandBase {
     }
 
     @Override
-    public List addTabCompletionOptions(ICommandSender sender, String[] args) {
+    public List<String> addTabCompletionOptions(ICommandSender sender, String[] args) {
         if (args.length == 10) {
             return getListOfStringsMatchingLastWord(args, "replace", "masked");
         }

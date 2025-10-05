@@ -161,27 +161,23 @@ public class CommandLocate extends CommandBase {
 
         if (!structureCache.containsKey(providerClass)) {
             Map<String, MapGenStructure> foundStructures = new HashMap<>();
-            final IChunkProvider finalProvider = provider;
-
             for (Class<?> c = providerClass; c != null; c = c.getSuperclass()) {
                 for (java.lang.reflect.Field field : c.getDeclaredFields()) {
                     try {
                         field.setAccessible(true);
-                        Object fieldValue = field.get(finalProvider);
+                        Object fieldValue = field.get(provider);
                         if (fieldValue == null) {
                             continue;
                         }
 
-                        if (fieldValue instanceof MapGenStructure) {
-                            MapGenStructure structure = (MapGenStructure) fieldValue;
+                        if (fieldValue instanceof MapGenStructure structure) {
                             foundStructures.putIfAbsent(
                                 structure.func_143025_a()
                                     .toLowerCase(),
                                 structure);
                         } else if (fieldValue instanceof Collection) {
                             for (Object element : (Collection<?>) fieldValue) {
-                                if (element instanceof MapGenStructure) {
-                                    MapGenStructure structure = (MapGenStructure) element;
+                                if (element instanceof MapGenStructure structure) {
                                     foundStructures.putIfAbsent(
                                         structure.func_143025_a()
                                             .toLowerCase(),
@@ -190,8 +186,7 @@ public class CommandLocate extends CommandBase {
                             }
                         } else if (fieldValue instanceof Map) {
                             for (Object mapValue : ((Map<?, ?>) fieldValue).values()) {
-                                if (mapValue instanceof MapGenStructure) {
-                                    MapGenStructure structure = (MapGenStructure) mapValue;
+                                if (mapValue instanceof MapGenStructure structure) {
                                     foundStructures.putIfAbsent(
                                         structure.func_143025_a()
                                             .toLowerCase(),
@@ -199,7 +194,7 @@ public class CommandLocate extends CommandBase {
                                 }
                             }
                         }
-                    } catch (Exception e) {}
+                    } catch (Exception e) {/* ignore */}
                 }
             }
             structureCache.put(providerClass, foundStructures);
@@ -221,7 +216,7 @@ public class CommandLocate extends CommandBase {
     }
 
     @Override
-    public List addTabCompletionOptions(ICommandSender sender, String[] args) {
+    public List<String> addTabCompletionOptions(ICommandSender sender, String[] args) {
         if (args.length == 1) {
             return getListOfStringsMatchingLastWord(args, "biome", "structure");
         }
