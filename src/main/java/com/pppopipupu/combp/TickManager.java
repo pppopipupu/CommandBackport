@@ -5,18 +5,17 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumChatFormatting;
 
-import com.pppopipupu.combp.mixin.MixinMinecraftServerAccessor;
 import com.pppopipupu.combp.network.S2CTickRatePacket;
 
 public class TickManager {
 
-    private static float targetTickRate = 20.0f;
-    private static float previousTickRate = 20.0f;
+    public static float targetTickRate = 20.0f;
+    public static float previousTickRate = 20.0f;
     private static boolean isSprinting = false;
-    private static long sprintStopTime = -1;
-    private static double tickAccumulator = 0.0;
-    private static ICommandSender sprintInitiator = null;
-    private static boolean isGameFrozen = false;
+    public static long sprintStopTime = -1;
+    public static double tickAccumulator = 0.0;
+    public static ICommandSender sprintInitiator = null;
+    public static boolean isGameFrozen = false;
 
     public static boolean isGameFrozen() {
         return isGameFrozen;
@@ -48,7 +47,7 @@ public class TickManager {
                 stopSprint();
             } else {
                 while ((System.nanoTime() - tickLogicStartTime) < timeBudget) {
-                    ((MixinMinecraftServerAccessor) server).invokeUpdateTimeLightAndEntities();
+                    server.updateTimeLightAndEntities();
                 }
                 return;
             }
@@ -62,7 +61,7 @@ public class TickManager {
         }
 
         while (tickAccumulator >= 1.0 && (System.nanoTime() - tickLogicStartTime) < timeBudget) {
-            ((MixinMinecraftServerAccessor) server).invokeUpdateTimeLightAndEntities();
+            server.updateTimeLightAndEntities();
             tickAccumulator -= 1.0;
         }
     }

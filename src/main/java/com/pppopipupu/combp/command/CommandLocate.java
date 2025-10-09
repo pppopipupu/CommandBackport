@@ -1,6 +1,14 @@
 package com.pppopipupu.combp.command;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.WeakHashMap;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
@@ -12,7 +20,9 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.ChunkProviderServer;
-import net.minecraft.world.gen.structure.*;
+import net.minecraft.world.gen.structure.MapGenStructure;
+import net.minecraft.world.gen.structure.StructureBoundingBox;
+import net.minecraft.world.gen.structure.StructureStart;
 
 import com.pppopipupu.combp.Config;
 import com.pppopipupu.combp.mixin.MixinMapGenStructureAccessor;
