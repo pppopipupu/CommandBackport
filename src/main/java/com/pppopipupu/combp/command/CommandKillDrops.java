@@ -1,14 +1,14 @@
 package com.pppopipupu.combp.command;
 
-import com.pppopipupu.combp.Config;
+import java.util.List;
+
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
+import com.pppopipupu.combp.Config;
 
 public class CommandKillDrops extends CommandBase {
 
@@ -34,7 +34,7 @@ public class CommandKillDrops extends CommandBase {
         }
         int count = 0;
         List<Entity> list = sender.getEntityWorld().loadedEntityList;
-        //直接for，防止CME
+        // 直接for，防止CME
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i) instanceof EntityItem entityItem) {
                 entityItem.setDead();
