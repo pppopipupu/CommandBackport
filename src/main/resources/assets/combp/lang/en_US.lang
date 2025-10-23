@@ -35,4 +35,6 @@ commands.combp.tick.freeze.already_frozen=Game is already frozen.
 commands.combp.tick.unfreeze.usage=/tick unfreeze
 commands.combp.tick.unfreeze.success=Game unfrozen.
 commands.combp.tick.unfreeze.not_frozen=Game is not frozen.
-commands.combp.tick.query.status.frozen=Game is currently FROZEN.
+commands.combp.tick.query.status.frozen=Game is currently frozen.
+commands.combp.killdrops.usage=Usage: /killdrops
+commands.killdrops.fill.success=Successfully killed %s items.

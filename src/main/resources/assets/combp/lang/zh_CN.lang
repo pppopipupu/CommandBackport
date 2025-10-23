@@ -36,3 +36,5 @@ commands.combp.tick.unfreeze.usage=/tick unfreeze
 commands.combp.tick.unfreeze.success=游戏已解冻。
 commands.combp.tick.unfreeze.not_frozen=游戏当前未被冻结。
 commands.combp.tick.query.status.frozen=游戏当前处于 冻结 状态。
+commands.combp.killdrops.usage=用法：/killdrops
+commands.killdrops.fill.success=成功杀死了%s个物品。

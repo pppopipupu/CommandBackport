@@ -1,9 +1,6 @@
 package com.pppopipupu.combp;
 
-import com.pppopipupu.combp.command.CommandClone;
-import com.pppopipupu.combp.command.CommandFill;
-import com.pppopipupu.combp.command.CommandLocate;
-import com.pppopipupu.combp.command.CommandTick;
+import com.pppopipupu.combp.command.*;
 import com.pppopipupu.combp.network.S2CTickRatePacket;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -39,6 +36,7 @@ public class CommonProxy {
         event.registerServerCommand(new CommandLocate());
         event.registerServerCommand(new CommandClone());
         event.registerServerCommand(new CommandTick());
+        event.registerServerCommand(new CommandKillDrops());
 
     }
 }
