@@ -4,6 +4,7 @@
 ### /clone
 ### /locate
 ### /tick
+### /killdrops (just like >1.8 kill @e[type=minecraft:item])
 ## Configuration in combp.cfg
 ```
 general {
