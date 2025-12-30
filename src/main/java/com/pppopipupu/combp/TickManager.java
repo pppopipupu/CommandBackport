@@ -16,6 +16,8 @@ public class TickManager {
     public static double tickAccumulator = 0.0;
     public static ICommandSender sprintInitiator = null;
     public static boolean isGameFrozen = false;
+    public static long stepTick = 0;
+    public static boolean isStep = false;
 
     public static boolean isGameFrozen() {
         return isGameFrozen;
@@ -50,6 +52,19 @@ public class TickManager {
                     server.updateTimeLightAndEntities();
                 }
                 return;
+            }
+        }
+        if (isGameFrozen && stepTick > 0) {
+            isGameFrozen = false;
+            isStep = true;
+        }
+        if(isStep) {
+            if(stepTick > 0) {
+                stepTick--;
+            }
+            else{
+                isStep = false;
+                isGameFrozen = true;
             }
         }
         double ticksToRunThisPeriod = targetTickRate / 20.0;

@@ -8,6 +8,7 @@ import net.minecraft.command.WrongUsageException;
 
 import com.pppopipupu.combp.Config;
 import com.pppopipupu.combp.TickManager;
+import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
 
 public class CommandTick extends CommandBase {
 
@@ -32,20 +33,12 @@ public class CommandTick extends CommandBase {
         if (args.length == 0) throw new WrongUsageException(getCommandUsage(sender));
 
         switch (args[0].toLowerCase()) {
-            case "rate":
-                handleRate(sender, args);
-                break;
-            case "sprint":
-                handleSprint(sender, args);
-                break;
-            case "freeze":
-                handleFreeze(sender, args);
-                break;
-            case "unfreeze":
-                handleUnfreeze(sender, args);
-                break;
-            default:
-                throw new WrongUsageException(getCommandUsage(sender));
+            case "sprint" -> handleSprint(sender, args);
+            case "freeze" -> handleFreeze(sender, args);
+            case "unfreeze" -> handleUnfreeze(sender, args);
+            case "rate" -> handleRate(sender, args);
+            case "step" -> handleStep(sender, args);
+            default -> throw new WrongUsageException(getCommandUsage(sender));
         }
     }
 
@@ -65,13 +58,14 @@ public class CommandTick extends CommandBase {
             return;
         }
 
-        if (TickManager.isSprinting()) {
+        if (TickManager.isSprinting())
             throw new WrongUsageException("commands.combp.tick.sprint.already_sprinting");
-        }
+        if (TickManager.isGameFrozen())
+            throw new WrongUsageException("commands.combp.tick.sprint.frozen_sprint");
 
         int duration = 0;
         if (args.length == 2) {
-            duration = parseIntBounded(sender, args[1], 1, 3600);
+            duration = parseIntBounded(sender, args[1], 1, 32767);
         }
         TickManager.startSprint(duration, sender);
         if (duration > 0) {
@@ -99,12 +93,27 @@ public class CommandTick extends CommandBase {
         func_152373_a(sender, this, "commands.combp.tick.unfreeze.success");
     }
 
+    private void handleStep(ICommandSender sender, String[] args) {
+        if (args.length != 2) throw new WrongUsageException("commands.combp.tick.step.usage");
+        if (args[1].equalsIgnoreCase("stop")) {
+            TickManager.stepTick = 0;
+            func_152373_a(sender, this, "commands.combp.tick.stop.step.success");
+        } else if(TickManager.isGameFrozen()) {
+            int duration = parseInt(sender, args[1]);
+            TickManager.stepTick = duration;
+            func_152373_a(sender, this, "commands.combp.tick.step.success", duration);
+        }
+        else throw new WrongUsageException("commands.combp.tick.unfreeze.not_frozen");
+
+
+    }
+
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args) {
         if (args.length == 1) {
-            return getListOfStringsMatchingLastWord(args, "rate", "sprint", "freeze", "unfreeze");
+            return getListOfStringsMatchingLastWord(args, "rate", "sprint", "freeze", "unfreeze", "step");
         }
-        if (args.length == 2 && "sprint".equalsIgnoreCase(args[0])) {
+        if (args.length == 2 && "sprint".equalsIgnoreCase(args[0]) || "step".equalsIgnoreCase(args[0])) {
             return getListOfStringsMatchingLastWord(args, "stop");
         }
         return null;

@@ -15,7 +15,7 @@ public abstract class MixinMinecraftServer {
         method = "Lnet/minecraft/server/MinecraftServer;tick()V",
         at = @At(value = "INVOKE", target = "Lnet/minecraft/server/MinecraftServer;updateTimeLightAndEntities()V"))
     private void redirectUpdateTimeLightAndEntities(MinecraftServer server) {
-        if (TickManager.targetTickRate != 20.0f || TickManager.isSprinting()) {
+        if (TickManager.targetTickRate != 20.0f || TickManager.isSprinting() || TickManager.isGameFrozen() || TickManager.isStep) {
             TickManager.runControlledTicks(server);
         } else {
             server.updateTimeLightAndEntities();
